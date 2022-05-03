@@ -22,12 +22,12 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
 ## Revision history
 ### 20220503
 * add functions:
-	*[CreateFileA()](CreateFileA.c)
-	*[CreateFileW()](CreateFileW.c)
-	*[CloseHandle()](CloseHandle.c)
-	*[ReadFile()](ReadFile.)
-	*[WriteFile()](WriteFile.c)
-	*[SetFilePointer()](SetFilePointer.c)
+   - [CreateFileA()](CreateFileA.c)
+   - [CreateFileW()](CreateFileW.c)
+   - [CloseHandle()](CloseHandle.c)
+   - [ReadFile()](ReadFile.)
+   - [WriteFile()](WriteFile.c)
+   - [SetFilePointer()](SetFilePointer.c)
 
 ### 20211101 alpha
 * all projects build with minor compiler warnings
