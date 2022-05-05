@@ -30,6 +30,7 @@
     <ClInclude Include="LibWin324UEFI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
+    <MSBuildWarningsAsMessages>MSB8012</MSBuildWarningsAsMessages>
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{223b3668-e022-4da7-a33d-c9168d1357a3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -90,6 +91,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <StringPooling>true</StringPooling>
       <UseFullPaths>false</UseFullPaths>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>EFI Application</SubSystem>

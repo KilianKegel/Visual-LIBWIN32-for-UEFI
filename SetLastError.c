@@ -17,7 +17,6 @@ Author:
     Kilian Kegel
 
 --*/
-#include <Uefi.h>
 #include <stdio.h>
 #include <stdint.h>
 
@@ -28,7 +27,7 @@ typedef uint32_t   DWORD;
 
 extern DWORD _w4udwLastError;
 
-static VOID WINAPI _w4uUEFISetLastError(_In_ DWORD dwErrCode)
+static void WINAPI _w4uUEFISetLastError(_In_ DWORD dwErrCode)
 {
     _w4udwLastError = dwErrCode;
 }

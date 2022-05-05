@@ -20,6 +20,9 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
 
 
 ## Revision history
+### 20220505
+* suppress build warning *MSB8012* due to redirected library output path
+
 ### 20220503
 * add functions:
    - [CreateFileA()](CreateFileA.c)
