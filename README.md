@@ -7,7 +7,7 @@
 Win32 API for UEFI Shell
 
 ## Goal
-Provides Win32 API to enable porting of Windows projects to UEFI Shell.<br>
+It provides Win32 API to enable porting of Windows projects to UEFI Shell.<br>
 The function set is extended on demand only. It is not (yet) intended to provide 
 the entire KERNEL32 API.
 
