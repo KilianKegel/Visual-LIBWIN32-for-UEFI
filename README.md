@@ -28,7 +28,7 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
    - [CreateFileA()](CreateFileA.c)
    - [CreateFileW()](CreateFileW.c)
    - [CloseHandle()](CloseHandle.c)
-   - [ReadFile()](ReadFile.)
+   - [ReadFile()](ReadFile.c)
    - [WriteFile()](WriteFile.c)
    - [SetFilePointer()](SetFilePointer.c)
 
