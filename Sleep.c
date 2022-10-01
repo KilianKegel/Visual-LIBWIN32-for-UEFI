@@ -21,6 +21,8 @@ Author:
 --*/
 #include <stdint.h>
 #include <time.h>
+#include "LibWin324UEFI.h"
+
 /** Sleep()
 Synopsis
     void Sleep(uint32_t dwMilliseconds);
@@ -39,3 +41,10 @@ void Sleep4UEFI(uint32_t dwMilliseconds)
     while (end > clock())
         ;
 }
+
+void WINAPI _w4uSleep(/*_In_*/ DWORD dwMilliseconds)
+{
+    return Sleep4UEFI(dwMilliseconds);
+}
+
+void* __imp_Sleep = (void*)_w4uSleep;

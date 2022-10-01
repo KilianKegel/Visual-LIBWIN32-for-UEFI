@@ -27,6 +27,7 @@ Author:
 #include <string.h>
 #include <Guid\Acpi.h>
 #include <Protocol\AcpiSystemDescriptionTable.h>
+#include "LibWin324UEFI.h"
 
 #define CDETRACE(msg) //printf(__FILE__"(%d) \\ " __FUNCTION__"(): ", __LINE__ ), printf msg
 
@@ -191,6 +192,7 @@ uint32_t __cdecl/*EFIAPI*/ GetSystemFirmwareTable4UEFI(
             if (sizeTbl <= BufferSize)
                 if (NULL != pFirmwareTableBuffer) {
                     memcpy(pFirmwareTableBuffer, pTbl, (size_t)sizeTbl);
+                    if(NULL != pAddress)
                     *pAddress = (uint64_t)pTbl;
                 }
         }
@@ -199,3 +201,19 @@ uint32_t __cdecl/*EFIAPI*/ GetSystemFirmwareTable4UEFI(
 
     return nRet ;
 }
+UINT WINAPI _w4uGetSystemFirmwareTable(
+    /*_In_*/ DWORD FirmwareTableProviderSignature,
+    /*_In_*/ DWORD FirmwareTableID,
+    /*_Out_writes_bytes_to_opt_(BufferSize, return)*/ PVOID pFirmwareTableBuffer,
+    /*_In_*/ DWORD BufferSize
+) {
+    return GetSystemFirmwareTable4UEFI(
+        FirmwareTableProviderSignature,
+        FirmwareTableID, pFirmwareTableBuffer, 
+        BufferSize, 
+        NULL, 
+        0
+    );
+}
+
+void* __imp_GetSystemFirmwareTable = (void*)_w4uGetSystemFirmwareTable;

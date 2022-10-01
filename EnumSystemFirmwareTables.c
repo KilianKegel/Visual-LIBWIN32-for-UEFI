@@ -26,6 +26,7 @@ Author:
 #include <Guid\Acpi.h>
 #include <IndustryStandard/Acpi62.h>
 #include <Protocol\AcpiSystemDescriptionTable.h>
+#include "LibWin324UEFI.h"
 
 extern EFI_SYSTEM_TABLE* pEfiSystemTable;
 extern EFI_HANDLE hEfiImageHandle;
@@ -108,3 +109,15 @@ uint32_t EnumSystemFirmwareTables4UEFI(uint32_t FirmwareTableProviderSignature, 
 
     return nRet;
 }
+UINT _w4uEnumSystemFirmwareTables(
+    /*[in] */ DWORD FirmwareTableProviderSignature,
+    /*[out]*/ PVOID pFirmwareTableEnumBuffer,
+    /*[in] */ DWORD BufferSize
+) {
+    return EnumSystemFirmwareTables4UEFI(
+        FirmwareTableProviderSignature,
+        pFirmwareTableEnumBuffer,
+        BufferSize
+    );
+}
+void* __imp_EnumSystemFirmwareTables = (void*)_w4uEnumSystemFirmwareTables;

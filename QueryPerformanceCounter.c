@@ -23,6 +23,7 @@ Author:
 
 #include <uefi.h>
 #include <stdint.h>
+#include "LibWin324UEFI.h"
 
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID))) //guiddef.h
 
@@ -45,3 +46,12 @@ int32_t EFIAPI QueryPerformanceCounter4UEFI(int64_t* lpPerformanceCount)
 
     return 1;
 }
+
+BOOL WINAPI _w4uQueryPerformanceCounter(
+    /*_Out_*/ int64_t* lpPerformanceCount
+) 
+{
+    return QueryPerformanceCounter4UEFI(lpPerformanceCount);
+};
+
+void* __imp_QueryPerformanceCounter = (void*)_w4uQueryPerformanceCounter;

@@ -20,6 +20,21 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
 
 
 ## Revision history
+### 20221001
+* simplify interaction of various **VISUAL-xyz** components, unitize directory structure 
+  and import/export interface for those solutions
+    * output folder for **Configuration Type: static Library** is commonly **$(SolutionPath)**\\***lib***
+      to share one single *library folder* for all imported subprojects
+    * adjust include path to be **$(ProjectDir)** relative
+* add `WINAPI` interface for 
+    * `EnumSystemFirmwareTables()`
+    * `GetSystemFirmwareTable()`
+    * `GetTickCount64()`
+    * `IsBadReadPtr()`
+    * `IsBadWritePtr()`
+    * `QueryPerformanceCounter()`
+    * `QueryPerformanceFrequency()`
+    * `Sleep()`
 ### 20220505
 * suppress build warning *MSB8012* due to redirected library output path
 

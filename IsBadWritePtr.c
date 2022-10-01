@@ -36,3 +36,5 @@ int IsBadWritePtr4UEFI(const void* lp, UINT_PTR  ucb)
 {
     return 0;
 }
+
+void* __imp_IsBadWritePtr = (void*)IsBadWritePtr4UEFI;

@@ -24,6 +24,7 @@ Author:
 
 #include <uefi.h>
 #include <stdint.h>
+#include "LibWin324UEFI.h"
 
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID))) //guiddef.h
 
@@ -127,3 +128,12 @@ int32_t EFIAPI QueryPerformanceFrequency4UEFI(int64_t* lpFrequency)
 
     return 1;
 }
+
+BOOL WINAPI _w4uQueryPerformanceFrequency(
+    /*_Out_*/ int64_t* lpFrequency
+) {
+    return QueryPerformanceFrequency4UEFI(lpFrequency);
+}
+
+void* __imp_QueryPerformanceFrequency = (void*)_w4uQueryPerformanceFrequency;
+

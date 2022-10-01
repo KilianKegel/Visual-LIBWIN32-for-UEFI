@@ -21,6 +21,8 @@ Author:
 --*/
 #include <stdint.h>
 #include <time.h>
+#include "LibWin324UEFI.h"
+
 /** GetTickCount64()
 Synopsis
     ULONGLONG GetTickCount64();
@@ -39,3 +41,5 @@ uint64_t __cdecl/*EFIAPI*/ GetTickCount644UEFI(void)
 {
     return (uint64_t)clock();
 }
+
+void* __imp_GetTickCount64 = (void*)GetTickCount644UEFI;
