@@ -27,25 +27,25 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
       to share one single *library folder* for all imported subprojects
     * adjust include path to be **$(ProjectDir)** relative
 * add `WINAPI` interface for 
-    * `EnumSystemFirmwareTables()`
-    * `GetSystemFirmwareTable()`
-    * `GetTickCount64()`
-    * `IsBadReadPtr()`
-    * `IsBadWritePtr()`
-    * `QueryPerformanceCounter()`
-    * `QueryPerformanceFrequency()`
-    * `Sleep()`
+    * [`EnumSystemFirmwareTables()`](EnumSystemFirmwareTables.c)
+    * [`GetSystemFirmwareTable()`](GetSystemFirmwareTable.c)
+    * [`GetTickCount64()`](GetTickCount64.c)
+    * [`IsBadReadPtr()`](IsBadReadPtr.c)
+    * [`IsBadWritePtr()`](IsBadWritePtr.c)
+    * [`QueryPerformanceCounter()`](QueryPerformanceCounter.c)
+    * [`QueryPerformanceFrequency()`](QueryPerformanceFrequency.c)
+    * [`Sleep()`]
 ### 20220505
 * suppress build warning *MSB8012* due to redirected library output path
 
 ### 20220503
 * add functions:
-   - [CreateFileA()](CreateFileA.c)
-   - [CreateFileW()](CreateFileW.c)
-   - [CloseHandle()](CloseHandle.c)
-   - [ReadFile()](ReadFile.c)
-   - [WriteFile()](WriteFile.c)
-   - [SetFilePointer()](SetFilePointer.c)
+   - [`CreateFileA()`](CreateFileA.c)
+   - [`CreateFileW()`](CreateFileW.c)
+   - [`CloseHandle()`](CloseHandle.c)
+   - [`ReadFile()`](ReadFile.c)
+   - [`WriteFile()`](WriteFile.c)
+   - [`SetFilePointer()`](SetFilePointer.c)
 
 ### 20211101 alpha
 * all projects build with minor compiler warnings
