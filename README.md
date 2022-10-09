@@ -20,6 +20,8 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
 
 
 ## Revision history
+### 20221009
+* add dedicated `Debug`/`Release` configurations
 ### 20221001
 * simplify interaction of various **VISUAL-xyz** components, unitize directory structure 
   and import/export interface for those solutions
