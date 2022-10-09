@@ -34,7 +34,7 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
     * [`IsBadWritePtr()`](IsBadWritePtr.c)
     * [`QueryPerformanceCounter()`](QueryPerformanceCounter.c)
     * [`QueryPerformanceFrequency()`](QueryPerformanceFrequency.c)
-    * [`Sleep()`]
+    * [`Sleep()`](Sleep.c)
 ### 20220505
 * suppress build warning *MSB8012* due to redirected library output path
 
