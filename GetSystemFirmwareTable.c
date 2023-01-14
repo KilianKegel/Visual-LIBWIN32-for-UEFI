@@ -41,8 +41,8 @@ Author:
 //
 // externs
 //
-extern EFI_SYSTEM_TABLE* pEfiSystemTable;
-extern EFI_HANDLE hEfiImageHandle;
+extern EFI_SYSTEM_TABLE* _cdegST;
+extern EFI_HANDLE _cdegImageHandle;
 
 /** GetSystemFirmwareTable()
 Synopsis
@@ -70,7 +70,7 @@ uint32_t __cdecl/*EFIAPI*/ GetSystemFirmwareTable4UEFI(
 {
     static EFI_GUID EfiAcpi20TableGuid = EFI_ACPI_20_TABLE_GUID;
     EFI_ACPI_2_0_ROOT_SYSTEM_DESCRIPTION_POINTER* pRSD = NULL;
-    EFI_CONFIGURATION_TABLE* pCfg = pEfiSystemTable->ConfigurationTable;
+    EFI_CONFIGURATION_TABLE* pCfg = _cdegST->ConfigurationTable;
     uint32_t nRet = 0;
     int ssdtinstance = 0,i;
     va_list ap;
@@ -119,14 +119,14 @@ uint32_t __cdecl/*EFIAPI*/ GetSystemFirmwareTable4UEFI(
             //printf("%.4s\n", true == fDSDT ? "DSDT" : (char*)(&FirmwareTableID));
         }
 
-        //CDETRACE(("--> pEfiSystemTable->NumberOfTableEntries %zd\n", pEfiSystemTable->NumberOfTableEntries));
+        //CDETRACE(("--> _cdegST->NumberOfTableEntries %zd\n", _cdegST->NumberOfTableEntries));
 
-        for (i = 0; i < pEfiSystemTable->NumberOfTableEntries; i++)
+        for (i = 0; i < _cdegST->NumberOfTableEntries; i++)
         {
             int64_t qwSig;
             char* pStr8 = NULL;
 
-            if (IsEqualGUID(&EfiAcpi20TableGuid, &pEfiSystemTable->ConfigurationTable[i].VendorGuid))
+            if (IsEqualGUID(&EfiAcpi20TableGuid, &_cdegST->ConfigurationTable[i].VendorGuid))
             {
                 pRSD = pCfg[i].VendorTable;
                 qwSig = pRSD->Signature;

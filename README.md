@@ -20,6 +20,11 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
 
 
 ## Revision history
+### 2023014
+* consolidate to **Toro C Library**
+    - from now on use SystemTable and ImageHandle from **Toro C Library**
+      `EFI_SYSTEM_TABLE* _cdegST`, `EFI_HANDLE _cdegImageHandle`
+    - remove **extern** dependancy from `EFI_SYSTEM_TABLE* pEfiSystemTable`, `EFI_HANDLE hEfiImageHandle`
 ### 20221009
 * add dedicated `Debug`/`Release` configurations
 ### 20221001
