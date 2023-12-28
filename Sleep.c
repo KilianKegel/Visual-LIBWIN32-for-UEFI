@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 2021-2023, Kilian Kegel. All rights reserved.<BR>
+Copyright (c) 2021-2024, Kilian Kegel. All rights reserved.<BR>
 
     SPDX-License-Identifier: GNU General Public License v3.0 only
 
