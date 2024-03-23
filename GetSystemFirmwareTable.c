@@ -27,12 +27,11 @@ Author:
 #include <string.h>
 #include <Guid\Acpi.h>
 #include <Protocol\AcpiSystemDescriptionTable.h>
+#include <Guid\SmBios.h>
+#include <IndustryStandard\SmBios.h>
 #include "LibWin324UEFI.h"
 
-#define CDETRACE(msg) //printf(__FILE__"(%d) \\ " __FUNCTION__"(): ", __LINE__ ), printf msg
-
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID))) //guiddef.h
-//#define CDETRACE(msg) //printf(__FILE__"(%d) \\ " __FUNCTION__"(): ", __LINE__ ), printf msg
 //
 //  warning C4273: 'GetSystemFirmwareTable': inconsistent dll linkage
 // 
@@ -43,6 +42,16 @@ Author:
 //
 extern EFI_SYSTEM_TABLE* _cdegST;
 extern EFI_HANDLE _cdegImageHandle;
+
+typedef struct _RAWSMBIOSDATA
+{
+    BYTE    Used20CallingMethod;
+    BYTE    SMBIOSMajorVersion;
+    BYTE    SMBIOSMinorVersion;
+    BYTE    DmiRevision;
+    DWORD   Length;
+    BYTE    SMBIOSTableData[];
+}RAWSMBIOSDATA;
 
 /** GetSystemFirmwareTable()
 Synopsis
@@ -68,7 +77,9 @@ uint32_t __cdecl/*EFIAPI*/ GetSystemFirmwareTable4UEFI(
         //      2. UINT32 Instance
 )
 {
-    static EFI_GUID EfiAcpi20TableGuid = EFI_ACPI_20_TABLE_GUID;
+    static const EFI_GUID EfiAcpi20TableGuid = EFI_ACPI_20_TABLE_GUID;
+    static const EFI_GUID SmbiosTableGuid = SMBIOS_TABLE_GUID;
+    SMBIOS_TABLE_ENTRY_POINT* pSmbiosTableEntryPoint = NULL;
     EFI_ACPI_2_0_ROOT_SYSTEM_DESCRIPTION_POINTER* pRSD = NULL;
     EFI_CONFIGURATION_TABLE* pCfg = _cdegST->ConfigurationTable;
     uint32_t nRet = 0;
@@ -85,116 +96,143 @@ uint32_t __cdecl/*EFIAPI*/ GetSystemFirmwareTable4UEFI(
     bool fDSDT = 'TDSD' == FirmwareTableID;
     uint64_t *pAddress = NULL;
 
-    //CDETRACE(("--> \nFirmwareTableProviderSignature: %c%c%c%c, \nFirmwareTableID: %c%c%c%c\n", 
-    //    0xFF & (FirmwareTableProviderSignature >> 24),
-    //    0xFF & (FirmwareTableProviderSignature >> 16),
-    //    0xFF & (FirmwareTableProviderSignature >> 8),
-    //    0xFF & (FirmwareTableProviderSignature >> 0),
-    //    0xFF & (FirmwareTableID >> 24),
-    //    0xFF & (FirmwareTableID >> 16),
-    //    0xFF & (FirmwareTableID >> 8),
-    //    0xFF & (FirmwareTableID >> 0)
-    //    ));
-    
     do {
 
-        if ('ACPI' != FirmwareTableProviderSignature)
+        if(     ('ACPI' != FirmwareTableProviderSignature) 
+            &&  ('RSMB' != FirmwareTableProviderSignature))
             break;                                                          // currently only support 'ACPI'
 
-        if (fDSDT)
-            FirmwareTableID = 'PCAF';                                       // patch FirmwareTableID to FACP == FADT
-
-        //
-        // get variadic arg parameters
-        //
-        pAddress = va_arg(ap, void*);
-        ssdtinstance = va_arg(ap, int);
-
-        if ('TDSS' != FirmwareTableID){
-            ssdtinstance = 0;
-
-            //printf("SSDT instance %d\n", ssdtinstance);
-        }
-        else {
-            //printf("%.4s\n", true == fDSDT ? "DSDT" : (char*)(&FirmwareTableID));
-        }
-
-        //CDETRACE(("--> _cdegST->NumberOfTableEntries %zd\n", _cdegST->NumberOfTableEntries));
-
-        for (i = 0; i < _cdegST->NumberOfTableEntries; i++)
+        if ('RSMB' == FirmwareTableProviderSignature)
         {
-            int64_t qwSig;
-            char* pStr8 = NULL;
 
-            if (IsEqualGUID(&EfiAcpi20TableGuid, &_cdegST->ConfigurationTable[i].VendorGuid))
+            for ( i = 0; i < _cdegST->NumberOfTableEntries; i++)
             {
-                pRSD = pCfg[i].VendorTable;
-                qwSig = pRSD->Signature;
-                break;
+                if (IsEqualGUID(&SmbiosTableGuid, &_cdegST->ConfigurationTable[i].VendorGuid))
+                {
+                    pSmbiosTableEntryPoint = _cdegST->ConfigurationTable[i].VendorTable;
+
+                    sizeTbl = pSmbiosTableEntryPoint->TableLength;
+                    pTbl = (void*)((size_t)pSmbiosTableEntryPoint->TableAddress);
+
+                    nRet = sizeTbl + sizeof(RAWSMBIOSDATA);
+
+                    if (sizeTbl <= BufferSize)
+                    {
+                        RAWSMBIOSDATA* pRAWSMBIOSDATA = pFirmwareTableBuffer;
+
+                        pRAWSMBIOSDATA->SMBIOSMajorVersion = pSmbiosTableEntryPoint->MajorVersion;
+                        pRAWSMBIOSDATA->SMBIOSMinorVersion = pSmbiosTableEntryPoint->MinorVersion;
+                        pRAWSMBIOSDATA->Length = pSmbiosTableEntryPoint->TableLength;
+                        pRAWSMBIOSDATA->DmiRevision = pSmbiosTableEntryPoint->EntryPointRevision;
+                        pRAWSMBIOSDATA->Used20CallingMethod = 0;
+
+                        pFirmwareTableBuffer = &pRAWSMBIOSDATA[1];
+
+                        if (NULL != pFirmwareTableBuffer) {
+                            memcpy(pFirmwareTableBuffer, pTbl, (size_t)sizeTbl);
+                            if (NULL != pAddress)
+                                *pAddress = (uint64_t)pTbl;
+                        }
+                    }
+
+                    break;
+                }
             }
+
         }
 
-        //CDETRACE(("--> pRSD %p\n", pRSD));
-
-        if (NULL != pRSD) do
+        if('ACPI' == FirmwareTableProviderSignature)
         {
-            EFI_ACPI_SDT_HEADER* pXSDT = (void*)pRSD->XsdtAddress;
-            EFI_ACPI_2_0_COMMON_HEADER* pTBLEnd = (void*)&(((char*)pXSDT)[pXSDT->Length]);
-            EFI_ACPI_2_0_COMMON_HEADER** ppTBL = (void*)&(((char*)pXSDT)[sizeof(EFI_ACPI_SDT_HEADER)]);
-            ptrdiff_t numTbl = pTBLEnd - (EFI_ACPI_2_0_COMMON_HEADER*)ppTBL, idxTbl;
+            if (fDSDT)
+                FirmwareTableID = 'PCAF';                                       // patch FirmwareTableID to FACP == FADT
 
-            if ('TDSX' == FirmwareTableID) {
-                pTbl = pXSDT;
-                sizeTbl = pXSDT->Length;
-                foundTbl = true;                                        // mark found flag and...
-                break;
+            //
+            // get variadic arg parameters
+            //
+            pAddress = va_arg(ap, void*);
+            ssdtinstance = va_arg(ap, int);
+
+            if ('TDSS' != FirmwareTableID) {
+                ssdtinstance = 0;
+            }
+            else {
             }
 
-            for (idxTbl = 0; idxTbl < numTbl; idxTbl++, ppTBL++)        // walk through all tables in the XSDT
-            {                                                           //
-                if (FirmwareTableID == (*ppTBL)->Signature)             // if signatur match...
-                {                                                       //
-                    if ('TDSS' == FirmwareTableID)                      // if SSDT also consider ...
-                    {                                                   //
-                        if (0 != ssdtinstance) {                        // ... multiple table instances
-                            if (ssdtinstance >= 0)                      // if positive...
-                                ssdtinstance--;                         //  ... decrement instance counter
-                            continue;                                   //
-                        }                                               //
-                    }                                                   //
-                                                                        //
-                    if (false == fDSDT)                                 // check DSDT request
-                    {                                                   // 
-                        pTbl = *ppTBL;                                  // ... save table address
-                        sizeTbl = (*ppTBL)->Length;                     // save table length
-                        foundTbl = true;                                // mark found flag and...
-                        break;// for()                                  // ...break for()
-                    }                                                   //
-                    else                                                //
-                    {                                                   // DSDT request
-                        EFI_ACPI_2_0_FIXED_ACPI_DESCRIPTION_TABLE* pFADT//
-                            = (void*) * ppTBL;                          //
-                        uint64_t tmp64 = pFADT->Dsdt;                   // typecast 32 -> 64 1/2
-                        EFI_ACPI_2_0_COMMON_HEADER* pDSDT=(void*)tmp64; // typecast 32 -> 64 2/2
-                        pTbl = pDSDT;                                   //
-                        sizeTbl = pDSDT->Length;                        // save table length
-                        foundTbl = true;                                // mark found flag and...
-                        break;// for()                                  // ...break for()
-                    }                                                   //
-                }                                                       // 
-            }
+            for (i = 0; i < _cdegST->NumberOfTableEntries; i++)
+            {
+                int64_t qwSig;
+                char* pStr8 = NULL;
 
-        } while (0);
-
-        if (true == foundTbl)
-        {
-            nRet = sizeTbl;
-            if (sizeTbl <= BufferSize)
-                if (NULL != pFirmwareTableBuffer) {
-                    memcpy(pFirmwareTableBuffer, pTbl, (size_t)sizeTbl);
-                    if(NULL != pAddress)
-                    *pAddress = (uint64_t)pTbl;
+                if (IsEqualGUID(&EfiAcpi20TableGuid, &_cdegST->ConfigurationTable[i].VendorGuid))
+                {
+                    pRSD = pCfg[i].VendorTable;
+                    qwSig = pRSD->Signature;
+                    break;
                 }
+            }
+
+            if (NULL != pRSD)
+            {
+                EFI_ACPI_SDT_HEADER* pXSDT = (void*)pRSD->XsdtAddress;
+                EFI_ACPI_2_0_COMMON_HEADER* pTBLEnd = (void*)&(((char*)pXSDT)[pXSDT->Length]);
+                EFI_ACPI_2_0_COMMON_HEADER** ppTBL = (void*)&(((char*)pXSDT)[sizeof(EFI_ACPI_SDT_HEADER)]);
+                ptrdiff_t numTbl = pTBLEnd - (EFI_ACPI_2_0_COMMON_HEADER*)ppTBL, idxTbl;
+
+                if ('TDSX' == FirmwareTableID) {
+                    pTbl = pXSDT;
+                    sizeTbl = pXSDT->Length;
+                    foundTbl = true;                                        // mark found flag and...
+                    break;
+                }
+
+                for (idxTbl = 0; idxTbl < numTbl; idxTbl++, ppTBL++)        // walk through all tables in the XSDT
+                {                                                           //
+                    if (FirmwareTableID == (*ppTBL)->Signature)             // if signatur match...
+                    {                                                       //
+                        if ('TDSS' == FirmwareTableID)                      // if SSDT also consider ...
+                        {                                                   //
+                            if (0 != ssdtinstance) {                        // ... multiple table instances
+                                if (ssdtinstance >= 0)                      // if positive...
+                                    ssdtinstance--;                         //  ... decrement instance counter
+                                continue;                                   //
+                            }                                               //
+                        }                                                   //
+                                                                            //
+                        if (false == fDSDT)                                 // check DSDT request
+                        {                                                   // 
+                            pTbl = *ppTBL;                                  // ... save table address
+                            sizeTbl = (*ppTBL)->Length;                     // save table length
+                            foundTbl = true;                                // mark found flag and...
+                            break;// for()                                  // ...break for()
+                        }                                                   //
+                        else                                                //
+                        {                                                   // DSDT request
+                            EFI_ACPI_2_0_FIXED_ACPI_DESCRIPTION_TABLE* pFADT//
+                                = (void*)*ppTBL;                          //
+                            uint64_t tmp64 = pFADT->Dsdt;                   // typecast 32 -> 64 1/2
+                            EFI_ACPI_2_0_COMMON_HEADER* pDSDT = (void*)tmp64; // typecast 32 -> 64 2/2
+                            pTbl = pDSDT;                                   //
+                            sizeTbl = pDSDT->Length;                        // save table length
+                            foundTbl = true;                                // mark found flag and...
+                            break;// for()                                  // ...break for()
+                        }                                                   //
+                    }                                                       // 
+                }
+
+                if (true == foundTbl)
+                {
+                    nRet = sizeTbl;
+                    if (sizeTbl <= BufferSize)
+                    {
+                        if (NULL != pFirmwareTableBuffer) {
+                            memcpy(pFirmwareTableBuffer, pTbl, (size_t)sizeTbl);
+                            if (NULL != pAddress)
+                                *pAddress = (uint64_t)pTbl;
+                        }
+                    }
+                }
+
+            }
         }
 
     } while (0);

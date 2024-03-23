@@ -44,7 +44,7 @@ void Sleep4UEFI(uint32_t dwMilliseconds)
 
 void WINAPI _w4uSleep(/*_In_*/ DWORD dwMilliseconds)
 {
-    return Sleep4UEFI(dwMilliseconds);
+    Sleep4UEFI(dwMilliseconds);
 }
 
 void* __imp_Sleep = (void*)_w4uSleep;

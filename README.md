@@ -1,7 +1,7 @@
 # Visual-LIBWIN32-for-UEFI
 ![LOGO](visualWin32API4UefiWide.png)
 
-	Copyright (c) 2021-2022, Kilian Kegel. All rights reserved.
+	Copyright (c) 2021-2024, Kilian Kegel. All rights reserved.
 	SPDX-License-Identifier: GNU General Public License v3.0
 
 Win32 API for UEFI Shell
@@ -20,7 +20,23 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
 
 
 ## Revision history
-### 2023014
+### 20240324
+* add `RSMB`-support for [`GetSystemFirmwareTable()`](GetSystemFirmwareTable.c)
+    * NOTE: The Windows-compatible implementation returns a pointer to [`RAWSMBIOSDATA`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemfirmwaretable#remarks).
+      The true SMBIOS data is preceded by that structure.
+```c
+typedef struct _RAWSMBIOSDATA
+{
+    BYTE    Used20CallingMethod;
+    BYTE    SMBIOSMajorVersion;
+    BYTE    SMBIOSMinorVersion;
+    BYTE    DmiRevision;
+    DWORD   Length;
+    BYTE    SMBIOSTableData[];
+}RAWSMBIOSDATA;
+```
+
+### 20230114
 * consolidate to **Toro C Library**
     - from now on use SystemTable and ImageHandle from **Toro C Library**
       `EFI_SYSTEM_TABLE* _cdegST`, `EFI_HANDLE _cdegImageHandle`
