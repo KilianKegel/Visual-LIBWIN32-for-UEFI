@@ -1,7 +1,7 @@
 # Visual-LIBWIN32-for-UEFI
 ![LOGO](visualWin32API4UefiWide.png)
 
-	Copyright (c) 2021-2024, Kilian Kegel. All rights reserved.
+	Copyright (c) 2021-2025, Kilian Kegel. All rights reserved.
 	SPDX-License-Identifier: GNU General Public License v3.0
 
 Win32 API for UEFI Shell
