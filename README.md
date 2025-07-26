@@ -18,6 +18,9 @@ Reimplement Win32 API based on Standard C Library ([Toro C Library](https://gith
 #### 1. install Visual Studio 2022 on a Windows PC<br>
 https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an-uefi-development-pc
 
+## Tool chain support
+* **LLVM/CLANG:** NO
+* **Microsoft v143, v142, v141:** YES
 
 ## Revision history
 ### 20240324
