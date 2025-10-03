@@ -145,7 +145,6 @@ uint32_t __cdecl/*EFIAPI*/ GetSystemFirmwareTable4UEFI(
         {
             if (fDSDT)
                 FirmwareTableID = 'PCAF';                                       // patch FirmwareTableID to FACP == FADT
-
             //
             // get variadic arg parameters
             //
@@ -218,24 +217,23 @@ uint32_t __cdecl/*EFIAPI*/ GetSystemFirmwareTable4UEFI(
                         }                                                   //
                     }                                                       // 
                 }
-
-                if (true == foundTbl)
-                {
-                    nRet = sizeTbl;
-                    if (sizeTbl <= BufferSize)
-                    {
-                        if (NULL != pFirmwareTableBuffer) {
-                            memcpy(pFirmwareTableBuffer, pTbl, (size_t)sizeTbl);
-                            if (NULL != pAddress)
-                                *pAddress = (uint64_t)pTbl;
-                        }
-                    }
-                }
-
             }
         }
 
     } while (0);
+
+    if (true == foundTbl)
+    {
+        nRet = sizeTbl;
+        if (sizeTbl <= BufferSize)
+        {
+            if (NULL != pFirmwareTableBuffer) {
+                memcpy(pFirmwareTableBuffer, pTbl, (size_t)sizeTbl);
+                if (NULL != pAddress)
+                    *pAddress = (uint64_t)pTbl;
+            }
+        }
+    }
 
     return nRet ;
 }

@@ -20,9 +20,11 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
 
 ## Tool chain support
 * **LLVM/CLANG:** NO
-* **Microsoft v143, v142, v141:** YES
+* **Microsoft v145, v143, v142, v141:** YES
 
 ## Revision history
+### 20251004
+* fixed: sporadically ACPI XSDT table not found by [`GetSystemFirmwareTable()`](GetSystemFirmwareTable.c)
 ### 20240324
 * add `RSMB`-support for [`GetSystemFirmwareTable()`](GetSystemFirmwareTable.c)
     * NOTE: The Windows-compatible implementation returns a pointer to [`RAWSMBIOSDATA`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemfirmwaretable#remarks).
