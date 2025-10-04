@@ -20,14 +20,14 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
 
 ## Tool chain support
 
-||Windows SDK<BR>10.0.26100.0|Windows <BR>10.0.22621.0|Windows SDK<BR>10.0.19041.0|Windows SDK<BR>10.0.17763.0|Windows SDK<BR>10.0.14393.0|
+||SDK 10.0.26100.0|SDK 10.0.22621.0|SDK 10.0.19041.0|SDK 10.0.17763.0|SDK 10.0.14393.0|
 |-|-|-|-|
-|**Platform<br>toolset LLVM**|☐|☐|☐|☐|☐|
-|**Platform<br>toolset v145<br>VS2026**|☑|☑|☑|☐|☐|
-|**Platform<br>toolset v143<br>VS2022**|☑|☑|☑|☐|☐|
-|**Platform<br>toolset v142<br>VS2019**|☑|☑|☑|☐|☐|
-|**Platform<br>toolset v141<br>VS2017**|☑|☑|☑|☐|☐|
-|**Platform<br>toolset v140<br>VS2010**|☐|☐|☐|☐|☐|
+|**Platform toolset LLVM**|☐|☐|☐|☐|☐|
+|**Platform toolset v145 VS2026**|☑|☑|☑|☐|☐|
+|**Platform toolset v143 VS2022**|☑|☑|☑|☐|☐|
+|**Platform toolset v142 VS2019**|☑|☑|☑|☐|☐|
+|**Platform toolset v141 VS2017**|☑|☑|☑|☐|☐|
+|**Platform toolset v140 VS2010**|☐|☐|☐|☐|☐|
 
 ## Revision history
 ### 20251004
