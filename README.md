@@ -19,12 +19,20 @@ Reimplement Win32 API based on Standard C Library ([Toro C Library](https://gith
 https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an-uefi-development-pc
 
 ## Tool chain support
-* **LLVM/CLANG:** NO
-* **Microsoft v145, v143, v142, v141:** YES
+||Windows SDK<BR>10.0.26100.0|Windows <BR>10.0.22621.0|Windows SDK<BR>10.0.19041.0|Windows SDK<BR>10.0.17763.0|Windows SDK<BR>10.0.14393.0|
+|-|-|-|-|
+|**Platform<br>toolset LLVM**|☐|☐|☐|☐|☐|
+|**Platform<br>toolset v145<br>VS2026**|☑|☑|☑|☐|☐|
+|**Platform<br>toolset v143<br>VS2022**|☑|☑|☑|☐|☐|
+|**Platform<br>toolset v142<br>VS2019**|☑|☑|☑|☐|☐|
+|**Platform<br>toolset v141<br>VS2017**|☑|☑|☑|☐|☐|
+|**Platform<br>toolset v140<br>VS2010**|☐|☐|☐|☐|☐|
 
 ## Revision history
 ### 20251004
 * fixed: sporadically ACPI XSDT table not found by [`GetSystemFirmwareTable()`](GetSystemFirmwareTable.c)
+* default **toolset/SDK** configuration is now **VS2026 v145/10.0.26100.0**
+* change solution fileformat from .SLN to .SLNX XML-based format
 ### 20240324
 * add `RSMB`-support for [`GetSystemFirmwareTable()`](GetSystemFirmwareTable.c)
     * NOTE: The Windows-compatible implementation returns a pointer to [`RAWSMBIOSDATA`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemfirmwaretable#remarks).
