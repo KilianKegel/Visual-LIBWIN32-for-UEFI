@@ -19,6 +19,7 @@ Reimplement Win32 API based on Standard C Library ([Toro C Library](https://gith
 https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an-uefi-development-pc
 
 ## Tool chain support
+
 ||Windows SDK<BR>10.0.26100.0|Windows <BR>10.0.22621.0|Windows SDK<BR>10.0.19041.0|Windows SDK<BR>10.0.17763.0|Windows SDK<BR>10.0.14393.0|
 |-|-|-|-|
 |**Platform<br>toolset LLVM**|☐|☐|☐|☐|☐|

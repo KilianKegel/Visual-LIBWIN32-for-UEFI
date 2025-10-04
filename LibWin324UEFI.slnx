@@ -6,5 +6,5 @@
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="LibWin324UEFI.vcxproj" />
+  <Project Path="LibWin324UEFI.vcxproj" Id="223b3668-e022-4da7-a33d-c9168d1357a3" />
 </Solution>
