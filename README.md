@@ -21,7 +21,7 @@ https://github.com/KilianKegel/HowTo-setup-an-UEFI-Development-PC#howto-setup-an
 ## Tool chain support
 
 ||SDK 10.0.26100.0|SDK 10.0.22621.0|SDK 10.0.19041.0|SDK 10.0.17763.0|SDK 10.0.14393.0|
-|-|-|-|-|
+|-|-|-|-|-|-|
 |**Platform toolset LLVM**|☐|☐|☐|☐|☐|
 |**Platform toolset v145 VS2026**|☑|☑|☑|☐|☐|
 |**Platform toolset v143 VS2022**|☑|☑|☑|☐|☐|
